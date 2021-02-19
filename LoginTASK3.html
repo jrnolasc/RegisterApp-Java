@@ -1,0 +1,43 @@
+<body>
+
+	<div class="header">
+		<h1 class="primary-message">Welcome!</h1>
+	</div>
+
+	<div id="main" class="main">
+		<div id="error" th:class="${#strings.isEmpty(errorMessage)}[return false] ? hidden : ''">
+			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
+		</div>
+
+		<form action="https://thebyteapp.herokuapp.com" method="POST" onsubmit="return validateForm();" class="inputContent" name="login">
+			<label for="employeeid">Employee ID:</label>
+			<input type="number" id="employeeid" name="employeeid" required th:value="${employeeid.eployeeId}"><br><br>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" required th:value="${employeeid.password"><br><br>
+
+			<input type="submit" id="sumbit" value="Sign In"> <!--href="/mainMenu/" class="button">--> 
+		</form>
+		<script>
+			//Function that validates the entered values
+			function validateForm() {
+
+			  // Checks to make sure the ID is numeric and nonmepty and displays an alert if it is not
+			  var idNum = document.forms["login"]["employeeid"].value;
+			  if (idNum == "")  {
+				 alert("ID cannot be blank");
+				 //return false;
+		      }
+		  
+			  // Checks to make sure the password is not empty and displays an alert if it is 
+			  var passW = document.forms["login"]["password"].value;
+			  if  (passW == "") {
+				 alert("Password cannot be empty");
+				 //return false;
+			   }
+			   //return false;
+			}
+			</script>
+
+	</div>
+
+</body>
