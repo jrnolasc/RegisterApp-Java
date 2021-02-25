@@ -21,7 +21,7 @@
 			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
 		</div>
 
-		<form action="https://thebyteapp.herokuapp.com" method="POST" onsubmit="return validateForm();" class="inputContent" name="login">
+		<form action="/" method="POST" onsubmit="return validateForm();" class="inputContent" name="login">
 			<label for="employeeid">Employee ID:</label>
 			<input type="number" id="employeeid" name="employeeid" required th:value="${employeeid.eployeeId}"><br><br>
 			<label for="password">Password:</label>
