@@ -27,27 +27,52 @@
 					<tr class="hidden">
 						<td>ID:</td>
 						<td>
-							<input id="employeeId" type="hidden" th:value="${!employee.isEmpty} ? ${employee.id} : ''" />
+							<input id="employeeId" type="hidden" th:value="${!employee.isEmpty} ? ${employee.id} : ''" /><br><br>
 						</td>
 					</tr>
 					<tr class="hidden">
 						<td>Manager ID:</td>
 						<td>
-							<input id="employeeManagerId" type="hidden" th:value="${!employee.isEmpty} ? ${employee.managerId} : ''" />
+							<input id="employeeManagerId" type="hidden" th:value="${!employee.isEmpty} ? ${employee.managerId} : ''" /><br><br>
 						</td>
 					</tr>
 					<tr th:class="${employee.isEmpty} ? hidden : ''">
 						<td class="label">Employee ID:</td>
 						<td>
-							<input id="employeeEmployeeId" type="text" th:value="${!employee.isEmpty} ? ${employee.employeeId} : ''" class="update" disabled />
+							<input id="employeeEmployeeId" type="text" th:value="${!employee.isEmpty} ? ${employee.employeeId} : ''" class="update" disabled /><br><br>
 						</td>
 					</tr>
-					<!-- TODO: Other employee inputs -->
+					<tr>
+						<label for="firstname">First Name:</label><br><br>
+						<input type="text" id="firstName" name="firstName" required th:value="${employee.firstName}"><br><br>
+					</tr>
+					<tr>
+						<label for="lastname">Last Name:</label><br><br>
+						<input type="text" id="lastname" name="lastname" required th:value="${employee.lastName}"><br><br>
+					</tr>
+
+					<tr>
+						<label for="Password">Password:</label><br><br>
+						<input type="password" id="Password" name="Password" required th:value="${employee.password}"><br><br>
+					</tr>
+					<tr>
+						<label for="confirmation">Confirm Password:</label><br><br>
+						<input type="password" id="confirmation" name="confirmation" required th:value="${employee.password}"><br><br>
+					</tr>
+					<tr>
+						<label for="EmployeeType">Employee Type:</label><br><br>
+						<select name ="EmployeeType" id="EmployeeType">
+						<option requied th:value="${employee.classification}">CASHIER</option>
+						<option requied th:value="${employee.classification}">SHIFT_MANAGER</option>
+						<option requied th:value="${employee.classification}">GENERAL_MANAGER</option>
+						</select>
+						
+					</tr>
 				</tbody>
 			</table>
 		</div>
 
-		<!-- TODO: An action element to initiate a save -->
+		<button id="saveButton" type="button" class="action">Save</button>
 
 		<div id="employeeSavedAlertModal" class="modal animate-opacity-show">
 			<div class="modal-content">
