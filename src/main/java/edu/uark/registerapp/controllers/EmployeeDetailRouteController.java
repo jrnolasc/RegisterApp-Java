@@ -23,7 +23,7 @@ import edu.uark.registerapp.models.entities.ActiveUserEntity;
 @Controller
 @RequestMapping(value = "/employeeDetail")
 public class EmployeeDetailRouteController extends BaseRouteController {
-	@RequestMapping(method = RequestMethod.GET)
+	//@RequestMapping(method = RequestMethod.GET)
 	//public ModelAndView start(
 	//  	@RequestParam final Map<String, String> queryParameters,
 	//  	final HttpServletRequest request
@@ -57,8 +57,8 @@ public class EmployeeDetailRouteController extends BaseRouteController {
 	//}
 
 	// Helper methods
-	private boolean activeUserExists() {
-		// TODO: Helper method to determine if any active users Exist
-		return true;
-	}
+	// private boolean activeUserExists() {
+	// 	// TODO: Helper method to determine if any active users Exist
+	// 	return true;
+	// }
 }
