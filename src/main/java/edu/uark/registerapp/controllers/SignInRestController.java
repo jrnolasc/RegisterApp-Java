@@ -21,11 +21,7 @@ public class SignInRestController extends BaseRestController {
 		final HttpServletRequest request
 	) {
 
-		// TODO: Sign out the user associated with request.getSession().getId()
-		// return this.validateActiveUserCommand
-		// 	.setSessionKey(request)
-		// 	.execute();
-
+		// Sign out the user associated with request.getSession().getId()
 			this.activeUserDeleteCommand.setSessionKey( 
 			request.getSession().getId()).execute();
 
@@ -38,7 +34,4 @@ public class SignInRestController extends BaseRestController {
 
 	@Autowired
 	private ActiveUserDeleteCommand activeUserDeleteCommand;
-
-	// @Autowired
-	// private ValidateActiveUserCommand validateActiveUserCommand;
 }
