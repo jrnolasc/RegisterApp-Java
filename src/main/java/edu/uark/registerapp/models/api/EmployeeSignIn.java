@@ -4,6 +4,12 @@ public class EmployeeSignIn {
     String employeeId;
     String password;
 
+    public EmployeeSignIn() {  //constructor
+        //initialize variables
+        this.employeeId = "";    
+        this.password = "";    
+    }
+
     //get and set employeeId;
     public String getEmployeeId() {
     	return this.employeeId;
@@ -21,4 +27,5 @@ public class EmployeeSignIn {
 		this.password = password;
 		return this;
 	}
+
 }
