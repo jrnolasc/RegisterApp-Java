@@ -1,23 +1,40 @@
 package edu.uark.registerapp.controllers;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.uark.registerapp.models.api.*;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 
 @Controller
 @RequestMapping(value = "/")
+
 public class SignInRouteController extends BaseRouteController {
-	// TODO: Route for initial page load
+	// @RequestMapping(method = RequestMethod.GET)
+	// public ModelAndView requestingDocumentAndView(
+	// 	// @RequestParam Map<String,String> userAndPass
+	// ){
+	// 	// try {
+	
+	// 	// } catch (final Exception e) {
+		
+	// 	// }
+	// 	ModelAndView modelAndView = null;
+	// 	return modelAndView;
+	// 	//return "Parameters are " + userAndPass.entrySet();
+	// }
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ModelAndView performSignIn(
-		// TODO: Define an object that will represent the sign in request and add it as a parameter here
+	public ModelAndView performSignIn (
+		EmployeeSignIn employeeSignIn, 
 		HttpServletRequest request
 	) {
 
@@ -29,4 +46,5 @@ public class SignInRouteController extends BaseRouteController {
 			REDIRECT_PREPEND.concat(
 				ViewNames.MAIN_MENU.getRoute()));
 	}
+
 }
