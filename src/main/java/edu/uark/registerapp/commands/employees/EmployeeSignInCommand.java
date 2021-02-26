@@ -76,7 +76,7 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
         }
         else{ 
             //if found
-            this.actRepo.save(actUser.get().setSessionKey(this.sessionId))
+            this.actRepo.save(actUser.get().setSessionKey(this.sessionId));
         }
 
     
