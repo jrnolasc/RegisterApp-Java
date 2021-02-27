@@ -1,6 +1,7 @@
 package edu.uark.registerapp.commands.employees;
 
 import edu.uark.registerapp.commands.ResultCommandInterface;
+import edu.uark.registerapp.commands.employees.helpers.EmployeeHelper;
 import edu.uark.registerapp.commands.exceptions.UnauthorizedException;
 import edu.uark.registerapp.commands.exceptions.UnprocessableEntityException;
 import edu.uark.registerapp.models.api.Employee;
@@ -23,14 +24,14 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
     @Override
     public Employee execute(){
         this.validateEmpObj();
-        return new Employee(this.SignInEmp()); // add function for signing in employee        
+        return new Employee(this.signInEmp()); // add function for signing in employee        
     }
     //validate incoming Employee request object
         //Employee ID should not be blank and should be a number
         //Password should not be blank
     public void validateEmpObj(){ 
-        String userId = this.empSignIn.getEmployeeId();// these may change based on what they are named
-        String password = this.empSignIn.getPassword();// same here. comes from EmployeeSignIn.java
+        String userId = this.empSignIn.employeeId;
+        String password = this.empSignIn.password;
         if (userId.length() <= 0){
             throw new UnprocessableEntityException("ID");
         }
@@ -38,35 +39,22 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
             throw new UnprocessableEntityException("Password");
         }
     }
-    //Query the employee by their employee ID
-        //Use EmployeeRepository.queryByEmployeeId() method
-        //verify the employee exists
-        //verify the password from the request and the database match
-            // use Array.equals()
-    //Transaction - Use the @Transactional annotation
-        //Query the activeuser for a record with the employee ID
-        //If exists
-            //update entitys sessionKey property with the current session key
-            //use the existing ActiveUserRepository.save() 
-        //Else
-            //create new activeuser record in the database
-                //set session key
-                //set the necessary employee details
-                //use the existing ActiveUserRepository.save()
+
     @Transactional
     private EmployeeEntity signInEmp() {
-        final Optional<EmployeeEntity> empEntity = this.eRepo.findByEmployeeId(this.empSignIn.getEmployeeId());//again the .getEmployeeId may change
+        int tempId = Integer.parseInt(this.empSignIn.employeeId); // turns string into int
+        final Optional<EmployeeEntity> empEntity = this.eRepo.findByEmployeeId(tempId);
         if(!empEntity.isPresent()){
             throw new UnprocessableEntityException("Id not found");
-        }
-        //the .getpassword in empSignIn may change once i get the name for it
-        if(!Arrays.equals(empEntity.get().getPassword(),this.empSignIn.getPassword())){
+        }        
+        byte empSignInPassword[] = EmployeeHelper.hashPassword(this.empSignIn.password);
+        if(!Arrays.equals(empEntity.get().getPassword(),empSignInPassword)) {
             throw new UnauthorizedException();
         }
         final Optional<ActiveUserEntity> actUser = this.actRepo.findByEmployeeId(empEntity.get().getId());
         //checking to see if user exists
         if(!actUser.isPresent()){
-            //if not found
+            //if not found, make new active user
             ActiveUserEntity newUser = new ActiveUserEntity();
             newUser.setSessionKey(this.sessionId);
             newUser.setEmployeeId(empEntity.get().getId());
@@ -75,11 +63,11 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
             this.actRepo.save(newUser);
         }
         else{ 
-            //if found
+            //if found, update session key
             this.actRepo.save(actUser.get().setSessionKey(this.sessionId));
         }
 
-    
+    return empEntity.get();
     }
     public String sessionId;
     public EmployeeSignIn empSignIn;// may look at this being private
