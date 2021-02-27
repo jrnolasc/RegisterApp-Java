@@ -19,6 +19,11 @@ public class ActiveUserDeleteCommand implements VoidCommandInterface {
     public String getSesKey(){
         return this.sKey;
     }
+    //ValidateActiveUserCommand has set session key, so I'm adding it here just in case
+    public ActiveUserDeleteCommand setSesKey(String sKey){
+        this.sKey = sKey;
+        return this;
+    }
     //In transaction use @Transactional here
         //Query the activeuser table for a record with provided session key
             //use the existing ActiveUserRepository.findBySessionKey()
@@ -27,13 +32,13 @@ public class ActiveUserDeleteCommand implements VoidCommandInterface {
     @Override
     public void execute(){
         Optional<ActiveUserEntity> activeUser = this.aR.findBySessionKey(this.sKey);
-        boolean status_check = activeUser.isPresent();
+        boolean statusCheck = activeUser.isPresent();
         // thes isPresent() is associated with Optional<>
         //So that is able to check is there is anyting in the Optional instance.
 
         //Delete the activeuser record
             //use the existing ActiveUserRepository.delete(
-        if(status_check){
+        if(statusCheck){
             this.aR.delete(activeUser.get());    //should delete the user        
         } 
         else{
