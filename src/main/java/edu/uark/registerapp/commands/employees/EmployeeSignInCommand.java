@@ -30,8 +30,8 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
         //Employee ID should not be blank and should be a number
         //Password should not be blank
     public void validateEmpObj(){ 
-        String userId = this.empSignIn.employeeId;
-        String password = this.empSignIn.password;
+        String userId = this.employeeSignIn.employeeId;
+        String password = this.employeeSignIn.password;
         if (userId.length() <= 0){
             throw new UnprocessableEntityException("ID");
         }
@@ -42,12 +42,12 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
 
     @Transactional
     private EmployeeEntity signInEmp() {
-        int tempId = Integer.parseInt(this.empSignIn.employeeId); // turns string into int
+        int tempId = Integer.parseInt(this.employeeSignIn.employeeId); // turns string into int
         final Optional<EmployeeEntity> empEntity = this.eRepo.findByEmployeeId(tempId);
         if(!empEntity.isPresent()){
             throw new UnprocessableEntityException("Id not found");
         }        
-        byte empSignInPassword[] = EmployeeHelper.hashPassword(this.empSignIn.password);
+        byte empSignInPassword[] = EmployeeHelper.hashPassword(this.employeeSignIn.password);
         if(!Arrays.equals(empEntity.get().getPassword(),empSignInPassword)) {
             throw new UnauthorizedException();
         }
@@ -70,7 +70,29 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
     return empEntity.get();
     }
     public String sessionId;
-    public EmployeeSignIn empSignIn;// may look at this being private
+
+    //get and set sessionId
+    public String getSessionId(){
+        return this.sessionId;
+    }
+
+    public EmployeeSignInCommand setSessionId(final String sessionId) {
+        this.sessionId = sessionId;
+        return this;
+    }
+
+    public EmployeeSignIn employeeSignIn;// may look at this being private
+
+    //get and set empSignIn
+    public EmployeeSignIn getEmployeeSignIn(){
+        return this.employeeSignIn;
+    }
+
+    public EmployeeSignInCommand setEmployeeSignIn(final EmployeeSignIn employeeSignIn) {
+        this.employeeSignIn = employeeSignIn;
+        return this;
+    }
+
     @Autowired
     private EmployeeRepository eRepo;
     @Autowired
