@@ -28,7 +28,6 @@ public class SignInRouteController extends BaseRouteController {
 	public ModelAndView requestingDocumentAndView(@RequestParam Map<String,String> userAndPass)
 	{
 		 try {
-			//if employee exists should serve up the sign in
 			this.activeEmployeeExistsQuery.execute();
 		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
 			//if no employee exists should redirect to employee detail view
@@ -36,7 +35,7 @@ public class SignInRouteController extends BaseRouteController {
 		 }
 		
 		ModelAndView modelAndView = this.setErrorMessageFromQueryString(new ModelAndView(ViewNames.SIGN_IN.getViewName()), userAndPass);
-		if (userAndPass.containsKey(QueryParameterNames.EMPLOYEE_ID.getValue())){
+		if (userAndPass.containsKey(QueryParameterNames.EMPLOYEE_ID.getValue())){ //if employee exists should serve up the sign in
 			modelAndView.addObject(ViewModelNames.EMPLOYEE_ID.getValue(), userAndPass.get(QueryParameterNames.EMPLOYEE_ID.getValue()));
 		}
 		return modelAndView;
@@ -51,6 +50,14 @@ public class SignInRouteController extends BaseRouteController {
 		// TODO: Use the credentials provided in the request body
 		//  and the "id" property of the (HttpServletRequest)request.getSession() 
 		// variable to sign in the user
+		try {
+			//if employee exists should serve up the sign in
+			this.activeEmployeeExistsQuery.execute();
+		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
+			//if no employee exists should redirect to employee detail view
+			return new ModelAndView(REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
+		 }
+
 		
 
 		return new ModelAndView(
