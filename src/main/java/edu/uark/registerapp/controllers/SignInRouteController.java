@@ -18,15 +18,17 @@ import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.commands.employees.ActiveEmployeeExistsQuery;
 import edu.uark.registerapp.commands.exceptions.NotFoundException;
+import edu.uark.registerapp.commands.exceptions.UnauthorizedException;
 import edu.uark.registerapp.models.api.EmployeeSignIn;
+import edu.uark.registerapp.commands.employees.EmployeeSignInCommand;
 
 @Controller
-@RequestMapping(value = "/")
+@RequestMapping(value = "/signIn")  // "/" routing giving errors since ProductListingRouteController uses the same route 
 
 public class SignInRouteController extends BaseRouteController {
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView requestingDocumentAndView(@RequestParam Map<String,String> userAndPass)
-	{
+	 @RequestMapping(method = RequestMethod.GET)
+	 public ModelAndView requestingDocumentAndView(@RequestParam Map<String,String> userAndPass)
+	 {
 		 try {
 			this.activeEmployeeExistsQuery.execute();
 		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
@@ -38,6 +40,7 @@ public class SignInRouteController extends BaseRouteController {
 		if (userAndPass.containsKey(QueryParameterNames.EMPLOYEE_ID.getValue())){ //if employee exists should serve up the sign in
 			modelAndView.addObject(ViewModelNames.EMPLOYEE_ID.getValue(), userAndPass.get(QueryParameterNames.EMPLOYEE_ID.getValue()));
 		}
+		//ModelAndView modelAndView = null;
 		return modelAndView;
 	}
 
@@ -46,20 +49,23 @@ public class SignInRouteController extends BaseRouteController {
 		EmployeeSignIn employeeSignIn, 
 		HttpServletRequest request
 	) {
-
-		// TODO: Use the credentials provided in the request body
-		//  and the "id" property of the (HttpServletRequest)request.getSession() 
-		// variable to sign in the user
-		try {
-			//if employee exists should serve up the sign in
-			this.activeEmployeeExistsQuery.execute();
-		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
-			//if no employee exists should redirect to employee detail view
-			return new ModelAndView(REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
+		try {  
+			//Use the credentials provided in the request body
+			//  and the "id" property of the (HttpServletRequest)request.getSession() 
+			// variable to sign in the user
+			this.employeeSignInCommand.setSessionId(request.getSession().getId()).setEmployeeSignIn(employeeSignIn).execute();
+		 } catch (UnauthorizedException e) {  //exception that EmployeeSignInCommand throws
+			//if not correct should go to the sign in page and provide error message indicating sign in was not successful
+			ModelAndView modelAndView = new ModelAndView(ViewNames.SIGN_IN.getViewName());
+			modelAndView.addObject(
+				ViewModelNames.ERROR_MESSAGE.getValue(),
+				e.getMessage());
+			modelAndView.addObject(
+				ViewModelNames.EMPLOYEE_ID.getValue(), employeeSignIn.getEmployeeId());
+			
+			return modelAndView;
 		 }
-
-		
-
+		 //if correct will redirect to the main menu
 		return new ModelAndView(
 			REDIRECT_PREPEND.concat(
 				ViewNames.MAIN_MENU.getRoute()));
@@ -68,5 +74,8 @@ public class SignInRouteController extends BaseRouteController {
 		// Properties
 		@Autowired
 		private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
+
+		@Autowired
+		private EmployeeSignInCommand employeeSignInCommand;
 
 }
