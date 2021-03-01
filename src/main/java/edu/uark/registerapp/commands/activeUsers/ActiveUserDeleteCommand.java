@@ -16,8 +16,17 @@ public class ActiveUserDeleteCommand implements VoidCommandInterface {
     private String sKey; //session key
     //Properties
     //Current session key    
-    public String getSesKey(){
-        return this.sKey;
+    //public String getSesKey(){
+    //    return this.sKey;
+    //}
+
+    public String getSessionKey() {
+		return this.sKey;
+	}
+
+	public ActiveUserDeleteCommand setSessionKey(final String sKey) {
+    	this.sKey = sKey;
+    	return this;
     }
     //ValidateActiveUserCommand has set session key, so I'm adding it here just in case
     public ActiveUserDeleteCommand setSesKey(String sKey){
