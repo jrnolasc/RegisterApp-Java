@@ -22,19 +22,24 @@
 		</div>
 
 		<form action="/" method="POST" onsubmit="return validateForm();" class="inputContent" name="login">
-			<label for="employeeid">Employee ID:</label>
-			<input type="number" id="employeeid" name="employeeid" required th:value="${employeeid.eployeeId}"><br><br>
+			<label for="employeeId">Employee ID:</label>
+			<div>
+				<input type="number" id="employeeId" name="employeeId" class="update" th:value="${employeeId}"> <!--required th:value="${employeeId.employeeId}">-->
+			</div>
 			<label for="password">Password:</label>
-			<input type="password" id="password" name="password" required th:value="${employeeid.password"><br><br>
-
-			<input type="submit" id="sumbit" value="Sign In"> <!--href="/mainMenu/" class="button">--> 
+			<div>
+				<input type="password" id="password" name="password" class="update" > <br><!--required th:value="${employeeId.password">-->
+			</div>
+			<div>
+				<input type="submit" id="sumbit" value="Sign In"> <!--href="/mainMenu/" class="button">--> 
+			</div>
 		</form>
 		<script>
 			//Function that validates the entered values
 			function validateForm() {
 
 			  // Checks to make sure the ID is numeric and nonmepty and displays an alert if it is not
-			  var idNum = document.forms["login"]["employeeid"].value;
+			  var idNum = document.forms["login"]["employeeId"].value;
 			  if (idNum == "")  {
 				 alert("ID cannot be blank");
 				 //return false;
