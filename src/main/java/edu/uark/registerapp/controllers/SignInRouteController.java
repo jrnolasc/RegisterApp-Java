@@ -55,7 +55,7 @@ public class SignInRouteController extends BaseRouteController {
 			//  and the "id" property of the (HttpServletRequest)request.getSession() 
 			// variable to sign in the user
 			this.employeeSignInCommand.setSessionId(request.getSession().getId()).setEmployeeSignIn(employeeSignIn).execute();
-		 } catch (UnauthorizedException e) {  //exception that EmployeeSignInCommand throws
+		 } catch (Exception e) {  //exception that EmployeeSignInCommand throws
 			//if not correct should go to the sign in page and provide error message indicating sign in was not successful
 			ModelAndView modelAndView = new ModelAndView(ViewNames.SIGN_IN.getViewName());
 			modelAndView.addObject(ViewModelNames.ERROR_MESSAGE.getValue(),e.getMessage());
