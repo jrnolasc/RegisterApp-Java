@@ -8,6 +8,39 @@
 
 	<script type="text/javascript" src="/scripts/master.js" defer></script>
 	<script type="text/javascript" src="/scripts/mainMenu.js" defer></script>
+
+	<!-- Daniel Salazar - Implemented eventhandlers for buttons -->
+	<!-- This needs to be defined in module master.js to call ajaxDelete-->
+	<script>
+		window.onload = function() {
+		document.getElementById('startTransaction').addEventListener('click', function () {
+		alert('Functionality has not yet been implemented.')
+		});
+
+		document.getElementById('viewProducts').addEventListener('click', function () {
+		location.href='productListing.html'
+		});
+
+		document.getElementById('createEmployee').addEventListener('click', function () {
+		location.href='employeeDetail.html'
+		});
+
+		document.getElementById('salesReport').addEventListener('click', function () {
+		alert('Functionality has not yet been implemented.')
+		});
+
+		document.getElementById('cashierReport').addEventListener('click', function () {
+		alert('Functionality has not yet been implemented.')
+		});
+
+		document.getElementById('signOutImage').addEventListener('click', function () {
+		location.href='signIn.html'
+		ajaxDelete()
+		});
+		};
+
+	</script>
+
 </head>
 
 <body>
@@ -23,17 +56,17 @@
 
 		<!-- Kyle Orman- Added the various action button elements -->
 		<div class="mainMenuButtonsWrapper">
-			<button id="startTransaction" type="button" class="action">Start Transaction</button>
+			<button type="button" id="startTransaction" >Start Transaction</button>
 			<br/>
-			<button id="viewProducts" type="button" class="action">View Products</button>
+			<button type="button" id="viewProducts" >View products</button>
 			<br/><br/>
 			<table id="mainMenu">
 				<tbody>
 					<div th:class="not ${isElevatedUser} ? hidden : ''">
 						<tr>
-						<td><button id="createEmployee" type="button" class="action">Create Employee</button></td>
-						<td><button id="salesReport" type="button" class="action">Sales Report</button></td>
-						<td><button id="cashierReport" type="button" class="action">Cashier Report</button></td>
+						<td><button type="button" id="createEmployee" >Create employee</button></td>
+						<td><button type="button" id="salesReport" >Sales Report</button></td>
+						<td><button type="button" id="cashierReport" >Cashier report</button></td>
 						</tr>
 					</div>
 				</tbody>
