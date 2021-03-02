@@ -34,6 +34,7 @@ public class SignInRouteController extends BaseRouteController {
 		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
 			//if no employee exists should redirect to employee detail view
 			//return new ModelAndView(REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
+			//COMMENTING OUT FOR NOW SINCE EMPLOYEEDETAILROUTECONTROLLER IS BROKE
 		 }
 		
 		ModelAndView modelAndView = this.setErrorMessageFromQueryString(new ModelAndView(ViewNames.SIGN_IN.getViewName()), userAndPass);
