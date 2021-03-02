@@ -23,7 +23,7 @@ import edu.uark.registerapp.models.api.EmployeeSignIn;
 import edu.uark.registerapp.commands.employees.EmployeeSignInCommand;
 
 @Controller
-@RequestMapping(value = "/signIn")  // "/" routing giving errors since ProductListingRouteController uses the same route 
+@RequestMapping(value = "/")  // "/" routing giving errors since ProductListingRouteController uses the same route 
 
 public class SignInRouteController extends BaseRouteController {
 	 @RequestMapping(method = RequestMethod.GET)
@@ -33,7 +33,7 @@ public class SignInRouteController extends BaseRouteController {
 			this.activeEmployeeExistsQuery.execute();
 		 } catch (NotFoundException e) {  //exception that ActiveEmployeeExistsQuery throws
 			//if no employee exists should redirect to employee detail view
-			return new ModelAndView(REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
+			//return new ModelAndView(REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
 		 }
 		
 		ModelAndView modelAndView = this.setErrorMessageFromQueryString(new ModelAndView(ViewNames.SIGN_IN.getViewName()), userAndPass);
