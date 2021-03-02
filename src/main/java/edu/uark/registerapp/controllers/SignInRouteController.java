@@ -41,7 +41,6 @@ public class SignInRouteController extends BaseRouteController {
 		if (userAndPass.containsKey(QueryParameterNames.EMPLOYEE_ID.getValue())){ //if employee exists should serve up the sign in
 			modelAndView.addObject(ViewModelNames.EMPLOYEE_ID.getValue(), userAndPass.get(QueryParameterNames.EMPLOYEE_ID.getValue())); // adds object containing employee id from userAndPass Map
 		}
-		//ModelAndView modelAndView = null;
 		return modelAndView;
 	}
 
@@ -58,8 +57,7 @@ public class SignInRouteController extends BaseRouteController {
 		 } catch (Exception e) {  //exception that EmployeeSignInCommand throws
 			//if not correct should go to the sign in page and provide error message indicating sign in was not successful
 			ModelAndView modelAndView = new ModelAndView(ViewNames.SIGN_IN.getViewName());
-			modelAndView.addObject(ViewModelNames.ERROR_MESSAGE.getValue(),e.getMessage());
-			// modelAndView.addObject(ViewModelNames.EMPLOYEE_ID.getValue(), employeeSignIn.getEmployeeId());  
+			modelAndView.addObject(ViewModelNames.ERROR_MESSAGE.getValue(),e.getMessage()); 
 			
 			return modelAndView;
 		 }
