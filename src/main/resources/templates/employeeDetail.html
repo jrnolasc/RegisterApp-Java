@@ -44,20 +44,20 @@
 					</tr>
 					<tr>
 						<label for="firstname">First Name:</label><br><br>
-						<input type="text" id="firstName" name="firstName" required th:value="${employee.firstName}"><br><br>
+						<input type="text" id="firstName" name="firstName" th:value="${!employee.isEmpty} ? ${employee.firstName} : ''" class="update"><br><br>
 					</tr>
 					<tr>
 						<label for="lastname">Last Name:</label><br><br>
-						<input type="text" id="lastname" name="lastname" required th:value="${employee.lastName}"><br><br>
+						<input type="text" id="lastname" name="lastname" th:value="${!employee.isEmpty} ? ${employee.lastName} : ''" class="update"><br><br>
 					</tr>
 
 					<tr>
 						<label for="Password">Password:</label><br><br>
-						<input type="password" id="Password" name="Password" required th:value="${employee.password}"><br><br>
+						<input type="password" id="Password" name="Password" th:value="${!employee.isEmpty} ? ${employee.password} : ''" class="update"><br><br>
 					</tr>
 					<tr>
 						<label for="confirmation">Confirm Password:</label><br><br>
-						<input type="password" id="confirmation" name="confirmation" required th:value="${employee.password}"><br><br>
+						<input type="password" id="confirmation" name="confirmation" th:value="${!employee.isEmpty} ? ${employee.password} : ''" class="update"><br><br>
 					</tr>
 					<tr>
 						<label for="EmployeeType">Employee Type:</label><br><br>
