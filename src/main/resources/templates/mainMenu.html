@@ -18,11 +18,11 @@
 		});
 
 		document.getElementById('viewProducts').addEventListener('click', function () {
-		location.href='productListing.html'
+		location.href="/productListing/"
 		});
 
 		document.getElementById('createEmployee').addEventListener('click', function () {
-		location.href='employeeDetail.html'
+		location.href="/employeeDetail/"
 		});
 
 		document.getElementById('salesReport').addEventListener('click', function () {
@@ -34,7 +34,7 @@
 		});
 
 		document.getElementById('signOutImage').addEventListener('click', function () {
-		location.href='signIn.html'
+		location.href="/"
 		ajaxDelete()
 		});
 		};
@@ -64,9 +64,9 @@
 				<tbody>
 					<div th:class="not ${isElevatedUser} ? hidden : ''">
 						<tr>
-						<td><button type="button" id="createEmployee" >Create employee</button></td>
-						<td><button type="button" id="salesReport" >Sales Report</button></td>
-						<td><button type="button" id="cashierReport" >Cashier report</button></td>
+						<br><button type="button" id="createEmployee" >Create employee</button></br>
+						<br><button type="button" id="salesReport" >Sales Report</button></br>
+						<br><button type="button" id="cashierReport" >Cashier report</button></br>
 						</tr>
 					</div>
 				</tbody>
