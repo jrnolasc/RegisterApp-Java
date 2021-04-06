@@ -40,24 +40,31 @@ public class EmployeeRestController extends BaseRestController {
 			//checks if employees exist and current user is elevated 
 			this.activeEmployeeExistsQuery.execute();
 
+			//main menu redirect
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			canCreateEmployeeResponse =
 				this.redirectUserNotElevated(request, response);
 
 		} catch (final NotFoundException e) {
+			//if exception is thrown (no active user in the session)
 			isInitialEmployee = true;
 			canCreateEmployeeResponse = new ApiResponse();
 		}
 
+		//if there is not an active user for the current session, redirect to sign in
 		if (!canCreateEmployeeResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			return canCreateEmployeeResponse;
 		}
 
+		//create employee using details in parameters 
 		final Employee createdEmployee =
 			this.employeeCreateCommand
 				.setApiEmployee(employee)
 				.setIsInitialEmployee(isInitialEmployee)
 				.execute();
 
+		//if initial employee, redirect to sign in				
 		if (isInitialEmployee) {
 			createdEmployee
 				.setRedirectUrl(
@@ -67,6 +74,7 @@ public class EmployeeRestController extends BaseRestController {
 							createdEmployee.getEmployeeId())));
 		}
 
+		//else return the created employee details as an Employee object
 		return createdEmployee.setIsInitialEmployee(isInitialEmployee);
 	}
 
@@ -77,14 +85,17 @@ public class EmployeeRestController extends BaseRestController {
 		final HttpServletRequest request,
 		final HttpServletResponse response
 	) {
-
+		//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 		final ApiResponse elevatedUserResponse =
 			this.redirectUserNotElevated(request, response);
 
+		//If current user is not elevated, redirect to main menu 
 		if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			return elevatedUserResponse;
 		}
 
+		//update employee
 		return this.employeeUpdateCommand
 			.setEmployeeId(employeeId)
 			.setApiEmployee(employee)
