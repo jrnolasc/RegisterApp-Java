@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uark.registerapp.commands.exceptions.NotFoundException;
 import edu.uark.registerapp.controllers.enums.QueryParameterNames;
@@ -41,6 +42,7 @@ public class EmployeeRestController extends BaseRestController {
 
 			canCreateEmployeeResponse =
 				this.redirectUserNotElevated(request, response);
+
 		} catch (final NotFoundException e) {
 			isInitialEmployee = true;
 			canCreateEmployeeResponse = new ApiResponse();
@@ -50,8 +52,11 @@ public class EmployeeRestController extends BaseRestController {
 			return canCreateEmployeeResponse;
 		}
 
-		// TODO: Create an employee;
-		final Employee createdEmployee = new Employee();
+		final Employee createdEmployee =
+			this.employeeCreateCommand
+				.setApiEmployee(employee)
+				.setIsInitialEmployee(isInitialEmployee)
+				.execute();
 
 		if (isInitialEmployee) {
 			createdEmployee
@@ -75,21 +80,24 @@ public class EmployeeRestController extends BaseRestController {
 
 		final ApiResponse elevatedUserResponse =
 			this.redirectUserNotElevated(request, response);
+
 		if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
 			return elevatedUserResponse;
 		}
 
-		// TODO: Update the employee
-		return employee;
+		return this.employeeUpdateCommand
+			.setEmployeeId(employeeId)
+			.setApiEmployee(employee)
+			.execute();
 	}
 
 	// Properties
+	@Autowired
+	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
+
 	@Autowired
 	private EmployeeCreateCommand employeeCreateCommand;
 	
 	@Autowired
 	private EmployeeUpdateCommand employeeUpdateCommand;
-	
-	@Autowired
-	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
 }
