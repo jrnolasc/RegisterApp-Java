@@ -93,11 +93,11 @@ public class EmployeeRestController extends BaseRestController {
 
 	// Properties
 	@Autowired
-	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
-
-	@Autowired
 	private EmployeeCreateCommand employeeCreateCommand;
 	
 	@Autowired
 	private EmployeeUpdateCommand employeeUpdateCommand;
+
+	@Autowired
+	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
 }
