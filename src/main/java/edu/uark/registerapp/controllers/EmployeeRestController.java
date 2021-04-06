@@ -18,6 +18,9 @@ import edu.uark.registerapp.controllers.enums.QueryParameterNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Employee;
+import edu.uark.registerapp.commands.employees.EmployeeCreateCommand;
+import edu.uark.registerapp.commands.employees.EmployeeUpdateCommand;
+import edu.uark.registerapp.commands.employees.ActiveEmployeeExistsQuery;
 
 @RestController
 @RequestMapping(value = "/api/employee")
@@ -33,7 +36,8 @@ public class EmployeeRestController extends BaseRestController {
 		ApiResponse canCreateEmployeeResponse;
 
 		try {
-			// TODO: Query if any active employees exist
+			//checks if employees exist and current user is elevated 
+			this.activeEmployeeExistsQuery.execute();
 
 			canCreateEmployeeResponse =
 				this.redirectUserNotElevated(request, response);
@@ -78,4 +82,14 @@ public class EmployeeRestController extends BaseRestController {
 		// TODO: Update the employee
 		return employee;
 	}
+
+	// Properties
+	@Autowired
+	private EmployeeCreateCommand employeeCreateCommand;
+	
+	@Autowired
+	private EmployeeUpdateCommand employeeUpdateCommand;
+	
+	@Autowired
+	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
 }
