@@ -29,7 +29,7 @@ public class EmployeeSignInCommand implements ResultCommandInterface<Employee> {
     //validate incoming Employee request object
         //Employee ID should not be blank and should be a number
         //Password should not be blank
-    public void validateEmpObj(){
+    public void validateEmpObj(){ 
         String userId = this.employeeSignIn.employeeId;
         String password = this.employeeSignIn.password;
         if (userId.length() <= 0){
