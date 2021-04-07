@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uark.registerapp.commands.exceptions.NotFoundException;
 import edu.uark.registerapp.controllers.enums.QueryParameterNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Employee;
+import edu.uark.registerapp.commands.employees.EmployeeCreateCommand;
+import edu.uark.registerapp.commands.employees.EmployeeUpdateCommand;
+import edu.uark.registerapp.commands.employees.ActiveEmployeeExistsQuery;
 
 @RestController
 @RequestMapping(value = "/api/employee")
@@ -33,22 +37,34 @@ public class EmployeeRestController extends BaseRestController {
 		ApiResponse canCreateEmployeeResponse;
 
 		try {
-			// TODO: Query if any active employees exist
+			//checks if employees exist and current user is elevated 
+			this.activeEmployeeExistsQuery.execute();
 
+			//main menu redirect
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			canCreateEmployeeResponse =
 				this.redirectUserNotElevated(request, response);
+
 		} catch (final NotFoundException e) {
+			//if exception is thrown (no active user in the session)
 			isInitialEmployee = true;
 			canCreateEmployeeResponse = new ApiResponse();
 		}
 
+		//if there is not an active user for the current session, redirect to sign in
 		if (!canCreateEmployeeResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			return canCreateEmployeeResponse;
 		}
 
-		// TODO: Create an employee;
-		final Employee createdEmployee = new Employee();
+		//create employee using details in parameters 
+		final Employee createdEmployee =
+			this.employeeCreateCommand
+				.setApiEmployee(employee)
+				.setIsInitialEmployee(isInitialEmployee)
+				.execute();
 
+		//if initial employee, redirect to sign in				
 		if (isInitialEmployee) {
 			createdEmployee
 				.setRedirectUrl(
@@ -58,6 +74,7 @@ public class EmployeeRestController extends BaseRestController {
 							createdEmployee.getEmployeeId())));
 		}
 
+		//else return the created employee details as an Employee object
 		return createdEmployee.setIsInitialEmployee(isInitialEmployee);
 	}
 
@@ -68,14 +85,30 @@ public class EmployeeRestController extends BaseRestController {
 		final HttpServletRequest request,
 		final HttpServletResponse response
 	) {
-
+		//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 		final ApiResponse elevatedUserResponse =
 			this.redirectUserNotElevated(request, response);
+
+		//If current user is not elevated, redirect to main menu 
 		if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
+			//sets HttpServletResponse status to FOUND/returns an ApiResponse object with the “redirectUrl” set appropriately
 			return elevatedUserResponse;
 		}
 
-		// TODO: Update the employee
-		return employee;
+		//update employee
+		return this.employeeUpdateCommand
+			.setEmployeeId(employeeId)
+			.setApiEmployee(employee)
+			.execute();
 	}
+
+	// Properties
+	@Autowired
+	private EmployeeCreateCommand employeeCreateCommand;
+	
+	@Autowired
+	private EmployeeUpdateCommand employeeUpdateCommand;
+
+	@Autowired
+	private ActiveEmployeeExistsQuery activeEmployeeExistsQuery;
 }
